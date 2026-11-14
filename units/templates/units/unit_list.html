@@ -1,0 +1,52 @@
+{% extends 'units/base.html' %}
+{% block title %}All fighters — Fortress{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="eyebrow">FORTRESS / ROSTER</p>
+  <h1>All fighters</h1>
+  <p>Choose a fighter to view their details and complete fight history.</p>
+</div>
+<div class="section-title"><h2>Available units <span class="count">{{ units|length }}</span></h2><a class="button secondary" href="{% url 'unit' %}">+ Add new</a></div>
+<div class="unit-grid">
+{% for unit in units %}
+  <article class="unit-card">
+    <a class="unit-main" href="{% url 'unit_detail' unit.pk %}" aria-label="View {{ unit.name }} details">
+      <img class="avatar" src="{{ unit.profile_image_link }}" alt="{{ unit.name }} profile" width="50" height="50" loading="lazy">
+      <div class="unit-info"><span class="team team-{{ unit.team|lower }}">{{ unit.team }}</span><h3>{{ unit.name }}</h3><p>{{ unit.unit_type }}</p></div>
+      <span class="chevron" aria-hidden="true">›</span>
+    </a>
+    <div class="unit-meta"><span>HP <strong>{{ unit.health }}/100</strong></span><span>ATK <strong>{{ unit.attack_points }}/50</strong></span></div>
+    {% if unit.health < 100 %}
+    <form method="post" action="{% url 'unit_heal' unit.pk %}" class="heal-row">{% csrf_token %}<button type="submit" class="button heal">Heal to 100 HP</button></form>
+    {% endif %}
+  </article>
+{% empty %}
+  <div class="panel empty">No fighters yet. <a href="{% url 'unit' %}">Add your first fighter</a> to begin.</div>
+{% endfor %}
+</div>
+
+<section class="panel fight-panel" id="simulate">
+  <p class="eyebrow">TASK 03 / SIMULATOR</p><h2>Simulate a fight</h2>
+  <p class="subtle">Select two living fighters from different teams. Each turn deals random damage from 0 up to the attacker's AttackPoints. The result and all turns are saved.</p>
+  <form method="post" action="{% url 'simulate' %}" novalidate>
+    {% csrf_token %}
+    {% if fight_form.non_field_errors %}<div class="alert error" role="alert">{{ fight_form.non_field_errors }}</div>{% endif %}
+    <div class="form-grid">
+      {% for field in fight_form %}<div class="field"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}</div>{% endfor %}
+    </div>
+    <button class="button primary" type="submit">Simulate fight</button>
+  </form>
+</section>
+
+<section class="stats-section">
+  <p class="eyebrow">TASK 04 / ALL-TIME STATS</p><h2>Team statistics</h2>
+  <p class="subtle">Calculated from saved fights and attack events. Each cross-team fight counts once for each participating team.</p>
+  <div class="stats-grid">
+    {% for team in stats %}
+      <article class="panel stats-card"><div class="stats-name"><span class="team team-{{ team.team|lower }}">{{ team.team }} team</span></div>
+        <dl><div><dt>Fights</dt><dd>{{ team.fights }}</dd></div><div><dt>Damage caused</dt><dd>{{ team.damage_caused }}</dd></div><div><dt>Damage taken</dt><dd>{{ team.damage_taken }}</dd></div></dl>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

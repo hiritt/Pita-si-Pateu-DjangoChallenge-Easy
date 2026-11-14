@@ -1,0 +1,23 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Fortress Roster{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'units/style.css' %}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell navrow">
+      <a class="brand" href="{% url 'unit_all' %}"><span class="brandmark">✦</span> DEADLOCK <span class="muted">// WAR SIMULATOR</span></a>
+      <nav aria-label="Main navigation"><a href="{% url 'unit_all' %}">All fighters</a><a class="navbutton" href="{% url 'unit' %}">+ Add fighter</a></nav>
+    </div>
+  </header>
+  <main class="shell">
+    {% for message in messages %}<div class="alert {% if message.tags %}{{ message.tags }}{% endif %}" role="status">{{ message }}</div>{% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="shell footer">CODE RUN · Django Challenge Easy · Local demo</footer>
+</body>
+</html>

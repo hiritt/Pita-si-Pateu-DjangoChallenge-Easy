@@ -1,0 +1,28 @@
+{% extends 'units/base.html' %}
+{% block title %}{{ unit.name }} — Fortress{% endblock %}
+{% block content %}
+<div class="page-head"><p class="eyebrow">FIGHTER PROFILE / TASK 02 + 04A</p><h1>{{ unit.name }}</h1><p><a href="{% url 'unit_all' %}">← Back to all fighters</a></p></div>
+<section class="panel profile">
+  <img class="profile-image" src="{{ unit.profile_image_link }}" alt="{{ unit.name }} profile" width="120" height="120">
+  <div><span class="team team-{{ unit.team|lower }}">{{ unit.team }} team</span><h2>{{ unit.name }}</h2>
+    <dl class="profile-data"><div><dt>Type</dt><dd>{{ unit.unit_type }}</dd></div><div><dt>Health</dt><dd>{{ unit.health }}/100</dd></div><div><dt>AttackPoints</dt><dd>{{ unit.attack_points }}/50</dd></div><div class="full"><dt>ProfileImageLink</dt><dd><a href="{{ unit.profile_image_link }}" target="_blank" rel="noopener noreferrer">View image URL</a></dd></div></dl>
+  </div>
+</section>
+<section class="history-section"><h2>Fight history</h2><p class="subtle">Every turn is saved with the attack points, damage dealt, and both fighters' remaining health.</p>
+{% for fight in fights %}
+  <article class="panel fight-record" id="fight-{{ fight.pk }}">
+    <div class="record-head"><div><p class="eyebrow">FIGHT #{{ fight.pk }} · {{ fight.started_at|date:'M j, Y, H:i' }} UTC</p>
+      <h3>{{ fight.fighter_one.name }} <span class="muted">vs</span> {{ fight.fighter_two.name }}</h3></div>
+      <strong class="result">{{ fight.result }}</strong>
+    </div>
+    <details {% if forloop.first %}open{% endif %}><summary>Full turn-by-turn history ({{ fight.events.all|length }} attacks)</summary>
+    <ol class="turn-list">
+    {% for event in fight.events.all %}
+      <li><span class="turn-number">Turn {{ event.turn_number }}</span><strong>{{ event.attacker.name }}</strong> attacked <strong>{{ event.defender.name }}</strong> — rolled {{ event.rolled_points }}, caused <strong>{{ event.damage }} damage</strong>.
+        <div class="turn-health">{{ event.attacker.name }} HP: {{ event.attacker_health }} · {{ event.defender.name }} HP: {{ event.defender_health }}</div></li>
+    {% empty %}<li>No attacks recorded.</li>{% endfor %}
+    </ol></details>
+  </article>
+{% empty %}<div class="panel empty">This fighter hasn't participated in a fight yet. <a href="{% url 'unit_all' %}#simulate">Start a simulation</a>.</div>{% endfor %}
+</section>
+{% endblock %}
