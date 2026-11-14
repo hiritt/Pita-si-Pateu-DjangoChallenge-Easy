@@ -1,4 +1,5 @@
 {% extends 'units/base.html' %}
+{% load static %}
 {% block title %}All fighters — Fortress{% endblock %}
 {% block content %}
 <div class="page-head">
@@ -11,7 +12,25 @@
 {% for unit in units %}
   <article class="unit-card">
     <a class="unit-main" href="{% url 'unit_detail' unit.pk %}" aria-label="View {{ unit.name }} details">
-      <img class="avatar" src="{{ unit.profile_image_link }}" alt="{{ unit.name }} profile" width="50" height="50" loading="lazy">
+      {% if unit.profile_image_link %}
+  <img
+    class="avatar"
+    src="{{ unit.profile_image_link }}"
+    alt="{{ unit.name }} profile"
+    width="50"
+    height="50"
+    loading="lazy"
+  >
+{% else %}
+  <img
+    class="avatar"
+    src="{% static 'units/default-fighter.png' %}"
+    alt="Default fighter avatar"
+    width="50"
+    height="50"
+    loading="lazy"
+  >
+{% endif %}
       <div class="unit-info"><span class="team team-{{ unit.team|lower }}">{{ unit.team }}</span><h3>{{ unit.name }}</h3><p>{{ unit.unit_type }}</p></div>
       <span class="chevron" aria-hidden="true">›</span>
     </a>

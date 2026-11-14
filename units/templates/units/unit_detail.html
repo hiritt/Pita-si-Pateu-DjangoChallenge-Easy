@@ -1,12 +1,32 @@
 {% extends 'units/base.html' %}
+{% load static %}
 {% block title %}{{ unit.name }} — Fortress{% endblock %}
 {% block content %}
 <div class="page-head"><p class="eyebrow">FIGHTER PROFILE / TASK 02 + 04A</p><h1>{{ unit.name }}</h1><p><a href="{% url 'unit_all' %}">← Back to all fighters</a></p></div>
 <section class="panel profile">
-  <img class="profile-image" src="{{ unit.profile_image_link }}" alt="{{ unit.name }} profile" width="120" height="120">
+  <img
+    class="profile-image"
+    src="{% if unit.profile_image_link %}{{ unit.profile_image_link }}{% else %}{% static 'units/default-fighter.png' %}{% endif %}"
+    alt="{{ unit.name }} profile"
+    width="120"
+    height="120"
+    onerror="this.onerror=null;this.src='{% static 'units/default-fighter.png' %}';"
+>
   <div><span class="team team-{{ unit.team|lower }}">{{ unit.team }} team</span><h2>{{ unit.name }}</h2>
-    <dl class="profile-data"><div><dt>Type</dt><dd>{{ unit.unit_type }}</dd></div><div><dt>Health</dt><dd>{{ unit.health }}/100</dd></div><div><dt>AttackPoints</dt><dd>{{ unit.attack_points }}/50</dd></div><div class="full"><dt>ProfileImageLink</dt><dd><a href="{{ unit.profile_image_link }}" target="_blank" rel="noopener noreferrer">View image URL</a></dd></div></dl>
-  </div>
+    <dl class="profile-data"><div><dt>Type</dt><dd>{{ unit.unit_type }}</dd></div><div><dt>Health</dt><dd>{{ unit.health }}/100</dd></div><div><dt>AttackPoints</dt><dd>{{ unit.attack_points }}/50</dd></div><div class="full">
+    <dt>ProfileImageLink</dt>
+    <dd>
+        {% if unit.profile_image_link %}
+            <a href="{{ unit.profile_image_link }}"
+               target="_blank"
+               rel="noopener noreferrer">
+                View image URL
+            </a>
+        {% else %}
+            Default fighter avatar
+        {% endif %}
+    </dd>
+</div>
 </section>
 <section class="history-section"><h2>Fight history</h2><p class="subtle">Every turn is saved with the attack points, damage dealt, and both fighters' remaining health.</p>
 {% for fight in fights %}

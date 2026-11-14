@@ -24,7 +24,10 @@ class Unit(models.Model):
     attack_points = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(50)],
     )
-    profile_image_link = models.URLField(max_length=500)
+    profile_image_link = models.URLField(
+        max_length=500,
+        blank=True
+    )
 
     class Meta:
         ordering = ["-id"]
@@ -80,7 +83,6 @@ class Fight(models.Model):
 
 class AttackEvent(models.Model):
     """Immutable snapshot of one simulated attack in a fight."""
-
     fight = models.ForeignKey(Fight, related_name="events", on_delete=models.CASCADE)
     turn_number = models.PositiveIntegerField()
     attacker = models.ForeignKey(

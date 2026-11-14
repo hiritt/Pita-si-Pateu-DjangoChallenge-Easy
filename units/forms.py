@@ -39,8 +39,8 @@ class UnitForm(forms.ModelForm):
         return name
 
     def clean_profile_image_link(self):
-        url = self.cleaned_data["profile_image_link"]
-        if not url.startswith(("http://", "https://")):
+        url = self.cleaned_data.get("profile_image_link", "")
+        if url and not url.startswith(("http://", "https://")):
             raise forms.ValidationError("Enter a valid HTTP or HTTPS URL.")
         return url
 
