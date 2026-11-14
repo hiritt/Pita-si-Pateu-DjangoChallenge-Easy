@@ -1,29 +1,56 @@
-## Testing
+## Installation and Setup
 
-Run the automated tests using:
+### Requirements
 
-```bash
-python manage.py test
+- Python 3.15
+- Git (to clone the repository)
+
+### 1. Clone the repository
+
+```powershell
+git clone https://github.com/hiritt/Pita-si-Pateu-DjangoChallenge-Easy.git
+cd Pita-si-Pateu-DjangoChallenge-Easy
 ```
 
-The project includes tests for unit creation, form validation, healing, fight simulation, fight history, and statistics.
+### 2. Create a virtual environment
 
-## Demonstration
+```powershell
+python -m venv .venv
+```
 
-1. Start the application using `python manage.py runserver`.
-2. Visit `/unit` to create fighters for the Blue and Red teams.
-3. Visit `/unit/all` to view the fighters.
-4. Select two fighters from opposing teams and simulate a battle.
-5. View the fight history, winner, and team statistics.
-6. Heal damaged fighters using the Heal button.
+### 3. Install the dependencies
 
-## Technologies
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
 
-- Python
-- Django
-- SQLite
-- HTML and CSS
+### 4. Set up the database
 
-## Development Notes
+```powershell
+.\.venv\Scripts\python.exe manage.py migrate
+```
 
-The application uses Django's development server and SQLite database. Production deployment requires appropriate security and configuration settings.
+### 5. Run automated tests
+
+```powershell
+.\.venv\Scripts\python.exe manage.py test
+```
+
+### 6. Start the application
+
+```powershell
+.\.venv\Scripts\python.exe manage.py runserver
+```
+
+### 7. Open the application
+
+- Add fighters: http://127.0.0.1:8000/unit
+- View fighters and simulate battles: http://127.0.0.1:8000/unit/all
+
+Press `Ctrl + C` in the terminal to stop the server.
+
+## Notes
+
+The application uses SQLite. Database tables are created automatically through Django migrations.
+
+The project is configured for local development, not production deployment.
