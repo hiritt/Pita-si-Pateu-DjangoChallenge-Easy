@@ -51,6 +51,6 @@ Press `Ctrl + C` in the terminal to stop the server.
 
 ## Notes
 
-The application uses SQLite. Database tables are created automatically through Django migrations.
+The application uses SQLite. Database tables are created automatically through Django migrations.  
 
 The project is configured for local development, not production deployment.
